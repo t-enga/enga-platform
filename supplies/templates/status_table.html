@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load render_table from django_tables2 %}
+<style>
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    .custom-table th, .custom-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    .custom-table th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    .custom-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    .custom-table tr:hover {
+        background-color: #ddd;
+    }
+    
+    .custom-table tr:nth-child(even):hover {
+        background-color: #ddd;
+    }
+
+    .custom-table th a {
+        text-decoration: none; /* Esto quita el subrayado del enlace */
+        color: inherit; /* Esto hereda el color del texto del encabezado de la tabla */
+        cursor: default; /* Esto cambia el cursor de selección a un cursor predeterminado */
+    }
+
+    
+    
+</style>
+
+<main class="container">
+    <div class="row mb-3">
+        <div>
+            <div class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary mt-2 mb-2">
+                <h1 class="text-center">Tabla de estatus de insumos</h1>
+            </div>
+            <div class="d-flex justify-content-center">
+                <form class="text-center card card-body" method="GET">
+                    <div class="row box align-items-center">
+                        <div class="col-md-3 mb-3">
+                            <label for="status" class="form-label">Estatus:</label>
+                            {{ registro_filter.form.status }}
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            <label for="unit" class="form-label">Unidad:</label>
+                            {{ registro_filter.form.unit }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="driver" class="form-label">Operador:</label>
+                            {{ registro_filter.form.driver }}
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            <label for="turn" class="form-label">Turno:</label>
+                            {{ registro_filter.form.turn }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="supplier" class="form-label">Proveedor:</label>
+                            {{ registro_filter.form.supplier }}
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="condition" class="form-label ">Condicion:</label>
+                            {{ registro_filter.form.condition }}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-1">
+                        <div class="mr-2 ml-2">
+                            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                        </div>
+                        <div class="mr-2 ml-2">
+                            <a href="/status/excel/" class="btn btn-dark ml-2">Descargar tabla</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card card-body mt-4 mb-4">
+            <div class="box">
+                {% render_table registro_table %}
+            </div>
+        </div>
+    </div>
+</main>   
+{% endblock %}

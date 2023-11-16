@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+
+<main class="container">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">Crear Viaje Ganado</h1>
+        </div>
+        <br>
+        <form class="card card-body" action="/trip/create/" method="POST">
+            {{ error }}
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-3 card card-body">
+                    <p>Lote: </p>
+                    {{ form.lote }}
+                    <p>Pesada:</p>
+                    {{ form.weight }}
+                    <p>Tipo de servicio:</p>
+                    {{ form.type_service }}
+                    <br>
+                </div>
+                <div class="col-md-3 card card-body">
+                    <p>Semana:</p>
+                    {{ form.week }}
+                    <p>Mes:</p>
+                    {{ form.month }}
+                    <p>Fecha del servicio:</p>
+                    {{ form.serv_date }}
+                    <p>Hora de cita:</p>
+                    {{ form.meeting_hour }}
+                </div>
+                <div class="col-md-3 card card-body">
+                    <p>Acopiador: </p>
+                    {{ form.supplier }}
+                    <p>Origen</p>
+                    {{ form.oigin }}
+                    <p>Lugar de cita:</p>
+                    {{ form.meeting_place }}
+                    <br>
+                    <select id="id_route" class="form-select" onchange="cargarRutaSeleccionada()">
+                        <option value="" selected disabled>Selecciona una ruta</option>
+                        {% for route in routes %}
+                            <option value="{{ route.id_route }}">{{ route.name_route }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ form.route}}
+                    <input type="hidden" name="route" id="hidden_route">
+                </div>
+                <div class="col-md-3 card card-body">
+                    <p>Tracto:</p>
+                    {{ form.truck }}
+                    <p>Remolque:</p>
+                    {{ form.trailer }}
+                    <p>Operador:</p>
+                    {{ form.driver }}
+                </div>
+            </div>
+            <br>
+            <div id="map" style="height: 400px; width: 90%;"></div>
+            <br>
+            <div class="text-center">
+                <button class="btn btn-success">Crear Viaje</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    var map;
+    var rutasDibujadas = [];
+    var markers = [];
+    
+    function initMap() {
+        console.log('Función inicializarMapa ejecutada');
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 19.191633, lng: -96.188799 },
+            zoom: 12
+        });
+        console.log(map);
+    }
+
+    async function cargarRuta(routeId) {
+        console.log('Cargando ruta para el ID:', routeId);
+    
+        try {
+            const response = await fetch(`/get/route/points/${routeId}/`);
+            const data = await response.json();
+            console.log('Datos recibidos:', data);
+            dibujarRuta(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function cargarRutaSeleccionada() {
+        console.log('cargarRutaSeleccionada ha sido llamada');
+        var selectedRouteId = document.getElementById("id_route").value;
+        console.log('ID de la ruta seleccionada:', selectedRouteId);
+        if (selectedRouteId) {
+            // Asignar el valor del ID de la ruta al campo oculto
+            document.getElementById("hidden_route").value = selectedRouteId;
+            cargarRuta(selectedRouteId);
+        }
+    }
+
+    function dibujarRuta(puntos) {
+        console.log('Puntos a dibujar:', puntos);
+    
+        var coordenadas = puntos.map(function(punto) {
+            return { lat: parseFloat(punto.lat_route), lng: parseFloat(punto.lon_route) };
+        });
+    
+        console.log('Coordenadas:', coordenadas);
+    
+        if (!map || !(map instanceof google.maps.Map)) {
+            console.error('El mapa no está inicializado correctamente.');
+            return;
+        }
+    
+        // Limpiar rutas anteriores
+        rutasDibujadas.forEach(function(ruta) {
+            ruta.setMap(null);
+        });
+        rutasDibujadas = [];
+    
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    
+        var nuevaRuta = new google.maps.Polyline({
+            path: coordenadas,
+            geodesic: true,
+            strokeColor: 'purple',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+    
+        nuevaRuta.setMap(map);
+    
+        // Guardar la nueva ruta dibujada
+        rutasDibujadas.push(nuevaRuta);
+    }
+    
+    $(document).ready(function() {
+        var vehicleNumber = '{{ trip.truck }}';
+    
+        $.ajax({
+            url: `/get/coordinates/`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var coordinates = data.coordinates;
+                var selectedUnit = null;
+                for (var i = 0; i < coordinates.length; i++) {
+                    if (coordinates[i].name == vehicleNumber) {
+                        selectedUnit = coordinates[i];
+                        break;
+                    }
+                }
+    
+                if (selectedUnit) {
+                    var latitude = selectedUnit.latitude;
+                    var longitude = selectedUnit.longitude;
+    
+                    // Ahora puedes hacer lo que necesites con la información de la unidad
+                    console.log('Latitud:', latitude);
+                    console.log('Longitud:', longitude);
+                } else {
+                    console.error('No se encontró la unidad con el número:', vehicleNumber);
+                }
+            },
+            error: function(error) {
+                console.error('Error al obtener las coordenadas:', error);
+            }
+        });
+    });
+
+    </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3EWIKBkTV6p3QwAVCrMDyrM1FlABbyG0&callback=initMap&libraries=visualization"></script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="card card-body">
+            <div class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">
+                <h1 class="text-center">Facturacion de Lote {{trip.lote}}</h1>
+            </div>
+            <form  method="POST">
+                {{error}}
+                {% csrf_token %}
+                <div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1">Typo de Factura: </p>
+                            {{ form.type_fact }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Número de Factura: </p>
+                            {{ form.fact_cp }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Fecha de factura: </p>
+                            {{ form.date_fact }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Monto de la factura: </p>
+                            {{ form.amount }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Precio unidatio: </p>
+                            {{ form.unit_price }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Tipo de nota: </p>
+                            {{ form.type_note }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Monto de la nota: </p>
+                            {{ form.amount_note }}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="text-center">
+                    <button class="btn btn-success">Ingresar datos</button>
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

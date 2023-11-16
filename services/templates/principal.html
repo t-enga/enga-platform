@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>Inicio</h1>
+<main class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 mt-5">
+            <h1>Ubicaciones en Tiempo Real</h1>
+            <div id="map" style="height: 400px;"></div> <!-- Aquí se mostrará el mapa -->
+        </div>
+    </div>
+</main>
+
+<script>
+    var map;
+    var markers = [];
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 0, lng: 0 },
+            zoom: 10
+        });
+    }
+
+    function updateMap() {
+        fetch('/get_coordinates/')
+            .then(response => response.json())
+            .then(data => {
+                data.coordinates.forEach(coord => {
+                    var existingMarker = markers.find(marker => marker.name === coord.name);
+                    
+                    if (existingMarker) {
+                        existingMarker.marker.setPosition({ lat: coord.latitude, lng: coord.longitude });
+                    } else {
+                        var marker = new google.maps.Marker({
+                            position: { lat: coord.latitude, lng: coord.longitude },
+                            map: map,
+                            label: coord.name
+                        });
+    
+                        var infoWindowContent = `
+                            <div>
+                                <h4>Unidad: ${coord.name}</h4>
+                                <p>Latitud: ${coord.latitude}</p>
+                                <p>Longitud: ${coord.longitude}</p>
+                            </div>
+                        `;
+                        
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: infoWindowContent
+                        });
+    
+                        marker.addListener('click', function() {
+                            infoWindow.open(map, marker);
+                        });
+    
+                        markers.push({ name: coord.name, marker: marker });
+                    }
+                });
+            });
+    }
+    
+
+    // Actualizar el mapa cada 1 minuto (60000 ms)
+    setInterval(updateMap, 60000);
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3EWIKBkTV6p3QwAVCrMDyrM1FlABbyG0&callback=initMap&libraries=visualization"></script>
+{% endblock %}

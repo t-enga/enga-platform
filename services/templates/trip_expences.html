@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="card card-body">
+                <div class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">
+                    <h1 class="text-center">Gatos de Lote: {{trip.lote}}</h1>
+                </div>
+                <form  method="POST">
+                    {{error}}
+                    {% csrf_token %}
+                    <div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="mb-1">Casetas: </p>
+                                {{ form.stand }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Telepeaje (IAVE): </p>
+                                {{ form.iave }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Viaticos: </p>
+                                {{ form.food }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Desinfecciones: </p>
+                                {{ form.dessinfections }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Reparaciones: </p>
+                                {{ form.fixes }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Partes: </p>
+                                {{ form.parts }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Llantas: </p>
+                                {{ form.tires }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Pension: </p>
+                                {{ form.pension }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Federal: </p>
+                                {{ form.federal }}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="text-center">
+                        <button class="btn btn-success">Ingresar Gastos</button>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

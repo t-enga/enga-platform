@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Viajes En Curso</h1>
+<ul>
+    {% for trip in trips %}
+        <li>
+            <a>
+                <h2>Lote: {{trip.lote}}, Pesada: {{trip.weight}}</h2>
+                {% if trip.exit_supplier %}
+                <p>Cargado</p>
+                {% else %}
+                <p>Vacio</p>
+                {% endif %}                
+                <p>{{trip.supplier}}, {{trip.oigin}}</p>
+            </a>
+            <a href="{% url 'trip_edit' trip.id_service %}">
+                <button>
+                    Editar Datos de Inicio
+                </button>
+            </a>
+            <a href="{% url 'trip_delete' trip.id_service %}">
+                <button>
+                    Eliminar Servicio
+                </button>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

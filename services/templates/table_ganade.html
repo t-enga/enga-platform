@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 offset-md-3 text-center mb-3 mt-3">
+          <h1 class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">Servicios de Ganado</h1>
+        </div>
+        <div class="card card-body" style="padding-right: 10px; padding-left: 10px;">
+          <div class="box card">
+            <table class="custom-table">
+              <tr>
+                  <th>LOTE</th>
+                  <th>PROVEEDOR</th>
+                  <th>UNIDAD</th>
+                  <th>JAULA</th>
+                  <th>OPERADOR</th>
+                  <th>HORARIO SALIDA</th>
+                  <th>KMS DE SALIDA</th>
+                  <th>LLEGADA A CITA</th>
+                  <th>KMS EN CITA</th>
+                  <th>LLEGADA ACOPIO</th>
+                  <th>KMS EN ACOPIO</th>
+                  <th>iNICIO CARGA 1</th>
+                  <th>KMS CARGA ACOPIO 1</th>
+                  <th>RECOLECCION 1</th>
+                  <th>COORDENADAS 1</th>
+                  <th>FIN CARGA 1</th>
+                  <th>INICIO CARGA 2</th>
+                  <th>KMS EN ACOPIO 2</th>
+                  <th>RECOLECCION 2</th>
+                  <th>COORDENADAS 2</th>
+                  <th>FIN CARGA 2</th>
+                  <th>INICIO CARGA 3</th>
+                  <th>KMS EN ACOPIO 3</th>
+                  <th>RECOLECCION 3</th>
+                  <th>COORDENADAS 3</th>
+                  <th>FIN CARGA 3</th>
+                  <th>INICIO DE RETORNO</th>
+                  <th>KMS DE RETORNO</th>
+                  <th>COMENTARIOS</th>
+              </tr>
+              {% for trip in trips %}
+                <tr>
+                  <td>{{ trip.lote }}</td>
+                  <td>{{ trip.supplier }}</td>
+                  <td>{{ trip.truck }}</td>
+                  <td>{{ trip.trailer }}</td>
+                  <td>{{ trip.driver }}</td>
+                  <td>{{ trip.ranch_exit }}</td>
+                  <td>{{ trip.kms_exit }}</td>
+                  <td>{{ trip.arrive_point }}</td>
+                  <td>{{ trip.arrive_kms }}</td>
+                  <td>{{ trip.arrive_supp }}</td>
+                  <td>{{ trip.arrive_kmssupp }}</td>
+                  <td>{{ trip.cargo1_arrival }}</td>
+                  <td>{{ trip.cargo1_kms }}</td>
+                  <td>{{ trip.cargo1_collected }}</td>
+                  <td>{{ trip.cargo1_coordinates }}</td>
+                  <td>{{ trip.cargo1_fin }}</td>
+                  <td>{{ trip.cargo2_arrival }}</td>
+                  <td>{{ trip.cargo2_kms }}</td>
+                  <td>{{ trip.cargo2_collected }}</td>
+                  <td>{{ trip.cargo2_coordinates }}</td>
+                  <td>{{ trip.cargo2_fin }}</td>
+                  <td>{{ trip.cargo3_arrival }}</td>
+                  <td>{{ trip.cargo3_kms }}</td>
+                  <td>{{ trip.cargo3_collected }}</td>
+                  <td>{{ trip.cargo3_coordinates }}</td>
+                  <td>{{ trip.cargo3_fin }}</td>
+                  <td>{{ trip.exit_supplier }}</td>
+                  <td>{{ trip.exit_supplierkms }}</td>
+                  <td>{{ trip.comentaries }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>  
+    </div>
+</main>
+{% endblock  %}

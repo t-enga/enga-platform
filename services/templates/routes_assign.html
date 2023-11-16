@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3 text-center">
+        <h1 class="card card-body-success">Servicios</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5 card">
+        <div class="d-flex justify-content-around mt-5 ml-5 mr-2">
+            <div class="row bg-info">
+                <div class="col">
+                    <p>Lote: {{ trip.lote }}</p>
+                    <p>Pesada: {{ trip.weight }}</p>
+                    <p>Unidad: {{ trip.truck }}</p>
+                    <p>Jaula: {{ trip.trailer }}</p>
+                    <p>Operador: {{ trip.driver }}</p>
+                </div>
+            </div>
+            <div class="row bg-warning">
+                <div class="col">
+                    <p>{{ trip.route }}</p>
+                    <p>Acopiador: {{ trip.supplier }}</p>
+                    <p>Lugar de Cita: {{ trip.meeting_place }}</p>
+                    <p>Fecha: {{ trip.serv_date }}</p>
+                    <p>Hora: {{ trip.meeting_hour }}</p>
+                    <p>Origen: {{ trip.oigin }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7 ">
+        <div class="row">
+            <div id="map" style="height: 350px; width: 90%;"></div>
+        </div>
+        <div class="row"></div>        
+    </div>
+
+</div>
+
+<script>
+    var map;
+    var markers = [];
+    var numeroUnidad = '{{ trip.truck }}';
+    var unitMarkers = [];
+    var rutaCoordenadas = [];
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 19.191633, lng: -96.188799 },
+            zoom: 12
+        });
+    
+        // Llama a la función para obtener las coordenadas al cargar la página
+        var routeId = '{{ trip.route.id_route }}';
+        obtenerCoordenadasDeRuta(routeId);
+        setInterval(obtenerPosicionEnTiempoReal, 30000); // Llama a obtenerPosicionEnTiempoReal cada 30 segundos
+
+    }
+    
+    console.log('Número de Unidad:', numeroUnidad);
+
+    function obtenerCoordenadasDeRuta(routeId) {
+        $.ajax({
+            url: `/get/route/points/${routeId}/`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                const coordenadas = data.map(coord => ({
+                    lat: parseFloat(coord.lat_route),
+                    lng: parseFloat(coord.lon_route)
+                }));
+                rutaCoordenadas = coordenadas; // Almacena las coordenadas de la ruta
+                dibujarRuta(coordenadas);
+            },
+            error: function(error) {
+                console.error('Error al obtener las coordenadas de la ruta:', error);
+            }
+        });
+    }
+    
+    function dibujarRuta(coordenadas) {
+        var ruta = new google.maps.Polyline({
+            path: coordenadas,
+            geodesic: true,
+            strokeColor: 'purple',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+    
+        ruta.setMap(map);
+    }
+
+
+
+    function estaFueraDeRuta(unitPosition) {
+        var point = turf.point([unitPosition.lng(), unitPosition.lat()]);
+        var line = turf.lineString(rutaCoordenadas);
+    
+        var isOutside = turf.booleanPointOnLine(point, line);
+    
+        return !isOutside;
+    }
+    
+
+    
+    function obtenerPosicionEnTiempoReal() {
+        console.log('Obteniendo posición en tiempo real');
+    
+        $.ajax({
+            url: `/get_coordinates/`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log('Respuesta del servidor:', response);
+    
+                var selectedUnit = response.coordinates.find(coord => coord.name === numeroUnidad);
+    
+                if (selectedUnit) {
+                    console.log('Unidad seleccionada:', selectedUnit);
+    
+                    var latitude = selectedUnit.latitude;
+                    var longitude = selectedUnit.longitude;
+    
+                    var newPosition = new google.maps.LatLng(latitude, longitude);
+    
+                    // Si el marcador ya existe, actualiza su posición
+                    var existingMarker = unitMarkers.find(marker => marker.name === selectedUnit.name);
+                    if (existingMarker) {
+                        existingMarker.marker.setPosition(newPosition);
+                    } else {
+                        // Si no existe, crea un nuevo marcador
+                        var marker = new google.maps.Marker({
+                            position: { lat: latitude, lng: longitude },
+                            map: map,
+                            label: selectedUnit.name
+                        });
+                        unitMarkers.push({ name: selectedUnit.name, marker: marker });
+                    }
+    
+                    map.setCenter(newPosition); // Esta línea centra el mapa en las nuevas coordenadas.
+                    var fueraDeRuta = estaFueraDeRuta(newPosition);
+                    if (fueraDeRuta) {
+                        alert('La unidad está fuera de la ruta.');
+                    }
+
+
+                } else {
+                    console.error('No se encontró la unidad con el número:', numeroUnidad);
+                }
+            },
+            error: function(error) {
+                console.error('Error al obtener las coordenadas:', error);
+            }
+        });
+    }    
+    
+    function mostrarUnidadEnMapa(selectedUnit) {
+        var latitude = selectedUnit.latitude;
+        var longitude = selectedUnit.longitude;
+    
+        // Crear un nuevo marcador
+        var marker = new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map: map,
+            label: selectedUnit.name
+        });
+    
+        // Guardar el marcador en el arreglo de markers
+        unitMarkers.push({ name: selectedUnit.name, marker: marker });
+    
+        // Centrar el mapa en la nueva posición
+        var newPosition = new google.maps.LatLng(latitude, longitude);
+        map.setCenter(newPosition);
+    }
+    
+    
+    
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3EWIKBkTV6p3QwAVCrMDyrM1FlABbyG0&callback=initMap&libraries=visualization"></script>
+{% endblock %}

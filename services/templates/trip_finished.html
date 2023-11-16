@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+                <div class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">
+                    <h1 class="text text-center">Viajes Finalizados</h1>
+                </div>
+                <ul class="list-group">
+                    {% for trip in trips %}
+                        <li class="card card-body">
+                            <a>
+                                <h2>Lote: {{trip.lote}}, Pesada: {{trip.weight}}</h2>
+                                <p>Finalizado</p>            
+                                <p>{{trip.supplier}}, {{trip.oigin}}</p>
+                                <p>{{trip.ranch_arrive|date:'M j Y:i'}}</p>
+                            </a>
+                            <div class="row">
+                                <div class="col">
+                                    <a href="{% url 'trip_expences' trip.id_service %}">
+                                        <button class="btn btn-dark">
+                                            Ingresar gastos
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a href="{% url 'trip_billing' trip.id_service %}">
+                                        <button class="btn btn-dark">
+                                            Ingresar facturación
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>    
+                        </li>
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="text-center">
+                <h1 class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">Servicios de Insumo</h1>
+            </div>
+            <div>
+                <ul class="list-group">
+                    {% for trip in trips %}
+                        <li class="card card-body">
+                            <h3>Folio: {{ trip.folio }}</h3>
+                            <label>Semana: {{ trip.week }},  Dia: {{ trip.day_assignment}} </label>
+                            <label>Unidad: {{ trip.truck }}, Proveedor:{{trip.port_supplier}}</label>
+                            <div> 
+                                <div class="d-flex justify-content-start" >
+                                    <a href="{% url 'supplie_editinit' trip.id_serv %}" class="btn btn-dark"> 
+                                        Editar Iniciales
+                                    </a>
+                                    <a href="{% url 'supplie_traffic' trip.id_serv %}" class="btn btn-dark">
+                                        Datos de trafico
+                                    </a>
+                                    <form action="{% url 'supplie_delete' trip.id_serv %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">
+                                            Borrar Servicio
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock  %}

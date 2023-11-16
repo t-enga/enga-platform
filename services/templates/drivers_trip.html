@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-2">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="d-flex col-md-6 offset-md-3 card card-body bg-success bg-gradient text-white text-emphasis-primary">
+                Informacion de Viaje
+            </h1>
+        </div>
+    </div>
+    <div class="card card-body col-md-6 offset-md-3 mb-2">
+        <div class="d-flex flex-row bd-highlight justify-content-around mb-3">
+            <div class="d-flex p-2 bd-highlight">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal1">
+                    Salida de Rancho
+                </button>
+                <!-- Modal 1 -->
+                <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal1Label">Kilometros de Salida</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <p>Ingrese los kilometros con los que se encuentra iniciando el servicio</p>
+                                    <br>
+                                    {{ form_ranch_exit.kms_exit }}
+                                    <br>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit_ranch_exit" class="btn btn-warning">Guardar</button>
+                                    </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex p-2 bd-highlight">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal2">
+                    Llegada a Cita
+                </button>
+                <!-- Modal 2 -->
+                <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal2Label">Kilometros Llegada a Cita</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <p>Ingrese los kilometros que indica el tacometro al llegar al punto de reunion</p>
+                                    <br>
+                                    {{ form_arrive_point.arrive_kms }}
+                                    <br>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit_arrive_point" class="btn btn-warning">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row bd-highlight justify-content-around mb-3">
+            <div class="d-flex p-2 bd-highlight">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal3">
+                    Llegada Acopio
+                </button>
+                <!-- Modal 3 -->
+                <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal3Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal3Label">Kilometros Llegada a Acopio</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <p>Ingresar los kilometros con los que se encuentra al arribar al punto de carga</p>
+                                    <br>
+                                    {{ form_arrive_supplier.arrive_kmssupp }}
+                                    <br>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit_arrive_supplier" class="btn btn-warning">Guardar</button>
+                                    </div>
+                                </form> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex p-2 bd-highlight">
+                <a href="{% url 'drivers_cargo' id_service=trip.id_service %}" class="btn btn-primary btn-lg">Lista Cargas</a>
+            </div>
+        </div>
+        <div class="d-flex flex-row bd-highlight justify-content-around mb-3">
+            <div class="d-flex p-2 bd-highlight">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal4">
+                    Salida Acopio
+                </button>
+                <!-- Modal 4 -->
+                <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-labelledby="modal4Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal4Label">Kilometros Salida de Acopio</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <p>Ingresar los kilometros al salir del punto de carga</p>
+                                    <br>
+                                    {{ form_exit_supplier.exit_supplierkms }}
+                                    <br>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit_exit_supplier" class="btn btn-warning">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex p-2 bd-highlight">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal5">
+                    Llegada Rancho
+                </button>
+                <!-- Modal 5 -->
+                <div class="modal fade" id="modal5" tabindex="-1" role="dialog" aria-labelledby="modal5Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal5Label">Kilometros Llegada a Rancho</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <p>Ingrese los kilometros con los que se encuentra ingresando a rancho</p>
+                                    <br>
+                                    {{ form_arrive_ranch.ranch_kms }}
+                                    <br>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit_arrive_ranch" class="btn btn-warning">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
+Bootstrap JS (jQuery debe estar incluido antes) 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+-->
+{% endblock %}

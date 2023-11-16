@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="card card-body">
+            <div class="text-center">
+                <h1 class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">Crear servicio de Insumo</h1>
+            </div>
+            <div class="col-md-9 offset-md-1">
+                <form action="/supplie/create/" method="POST" class="form-control">
+                    {{error}}
+                    {% csrf_token %}
+                    <div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="mb-1">Semana: </p>
+                                {{ form.week }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Dia de asignacion: </p>
+                                {{ form.day_assignment }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Mes: </p>
+                                {{ form.month }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Operador: </p>
+                                {{ form.driver }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Unidad: </p>
+                                {{ form.truck }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Tolva: </p>
+                                {{ form.trailer }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Capacidad: </p>
+                                {{ form.capacity }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Tipo de insumo: </p>
+                                {{ form.type_supplie }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Proveedor: </p>
+                                {{ form.port_supplier }}
+                            </div>
+                            <div class="col-md-3">
+                                <p class="mb-1">Turno: </p>
+                                {{ form.turns }}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="text-center">
+                        <button class="btn btn-success">Crear Viaje</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

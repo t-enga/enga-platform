@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1>Informacion de unidades</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            {% if data %}
+                {% for device in data %}
+                    <div class="card card-body mt-1 mb-1">
+                        <p>Nombre del dispositivo: {{ device.vehicleNumber }} Placas: {{ device.numberPlates }}</p>
+                        <p>Latitud: {{ device.position.latitude }}</p>
+                        <p>Longitud: {{ device.position.longitude }}</p>
+                    </div>
+                    <!-- Agrega más campos según sea necesario -->
+                {% endfor %}
+            {% else %}
+                <p>No se encontraron datos válidos</p>
+            {% endif %}
+        </div>
+        <div class="col-md-9" id="map" style="height: 500px;"></div>
+    </div>
+</div>
+
+<script>
+    var map;
+    function initMap() {
+        var myLatLng = {lat: 19.191633, lng: -96.188799}; // Cambia estas coordenadas con el punto de inicio de tu ruta
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 12
+        });
+
+        var flightPlanCoordinates = [
+            {lat: 19.169011, lng: -96.285267},  // Punto de inicio
+            {lat: 19.173577, lng: -96.274386},  // Punto intermedio
+            {lat: 19.173840, lng: -96.269543},   // Punto final
+            {lat: 19.174240, lng: -96.268617},
+            {lat: 19.136471, lng: -96.253040},
+            {lat: 19.134119, lng: -96.251110},    
+            {lat: 19.084970, lng: -96.198543},
+            {lat: 19.083911, lng: -96.197661},
+            {lat: 19.083262, lng: -96.197592},
+            {lat: 19.081537, lng: -96.198744},
+
+        ];
+
+        var flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: 'purple',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+
+        flightPath.setMap(map);
+    }
+    
+    var markers = [];
+    function updateMap() {
+        fetch('/get_coordinates/')
+            .then(response => response.json())
+            .then(data => {
+                data.coordinates.forEach(coord => {
+                    var existingMarker = markers.find(marker => marker.name === coord.name);
+                    
+                    if (existingMarker) {
+                        existingMarker.marker.setPosition({ lat: coord.latitude, lng: coord.longitude });
+                    } else {
+                        var marker = new google.maps.Marker({
+                            position: { lat: coord.latitude, lng: coord.longitude },
+                            map: map,
+                            label: coord.name
+                        });
+    
+                        var infoWindowContent = `
+                            <div>
+                                <h4>Unidad: ${coord.name}</h4>
+                                <p>Latitud: ${coord.latitude}</p>
+                                <p>Longitud: ${coord.longitude}</p>
+                            </div>
+                        `;
+                        
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: infoWindowContent
+                        });
+    
+                        marker.addListener('click', function() {
+                            infoWindow.open(map, marker);
+                        });
+    
+                        markers.push({ name: coord.name, marker: marker });
+                    }
+                });
+            });
+    }
+    // Actualizar el mapa cada 1 minuto (60000 ms)
+    setInterval(updateMap, 20000);
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3EWIKBkTV6p3QwAVCrMDyrM1FlABbyG0&callback=initMap&libraries=visualization"></script>
+
+
+{% endblock %}

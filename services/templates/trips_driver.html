@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+            <div class="text-center">
+                <h1 class="d-flex col-md-6 offset-md-3 card card-body bg-success bg-gradient text-white text-emphasis-primary">Servicios en Asignados {{ trip.truck }}</h1>
+            </div>
+            <div class="col-md-6 offset-md-3">
+            <ul class="list-group">
+                {% for trip in trips %}
+                        <li class="list-group-item">
+                            <a>
+                            <h3> Lote: {{trip.lote}}</h3>
+                    {% if trip.exit_supplier %}
+                            <p>Cargado</p>
+                    {% else %}
+                            <p>Vacio</p>
+                    {% endif %}
+                            <p>{{trip.supplier}}, {{trip.oigin}}</p>
+                            </a>
+                        <a href="{% url 'drivers_trip' trip.id_service %}" class="btn btn-dark">
+                            Estatus
+                        </a>
+                    </li>
+                    </header>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

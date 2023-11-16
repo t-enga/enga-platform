@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<main>
+    <div class="row">
+        <div class="text-center">
+            <h1 class="d-flex col-md-6 offset-md-3 card card-body bg-success bg-gradient text-white text-emphasis-primary mt-3">Buscar por Número de Folio</h1>
+        </div>
+        <div class="col-md-8 offset-md-2 card">
+            <div class="row ">
+                <div class="col card text-center" style="margin: 3px;">
+                    <form method="GET">
+                        {% csrf_token %}
+                        {{ form }}
+                        <button type="submit">Buscar</button>
+                    </form>
+                </div>
+                <div class="col card text-center" style="margin: 3px;">
+                    {% for supply in matches %}
+                        <h4>Folio mostrado: {{ supply.folio }}</h4>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 box card col-md-10 offset-md-1">
+            <div >
+                {% if status_entries %}
+                    <table class="custom-table mb-3 mt-3">
+                        <thead>
+                            <tr>
+                                <th>Fecha de Status</th>
+                                <th>Consulta</th>
+                                <th>Diferencia de Tiempo</th>
+                                <th>Estado</th>
+                                <th>Kilómetros</th>
+                                <th>Coordenadas</th>
+                                <th>Unidad</th>
+                                <th>Conductor</th>
+                                <th>Turno</th>
+                                <th>Proveedor</th>
+                                <th>Condición</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for status in status_entries %}
+                                <tr>
+                                    <td>{{ status.time_status }}</td>
+                                    <td>{{ status.time_consult }}</td>
+                                    <td>{{ status.time_dif }}</td>
+                                    <td>{{ status.status }}</td>
+                                    <td>{{ status.kms }}</td>
+                                    <td>{{ status.coordinates }}</td>
+                                    <td>{{ status.unit }}</td>
+                                    <td>{{ status.driver }}</td>
+                                    <td>{{ status.turn }}</td>
+                                    <td>{{ status.supplier }}</td>
+                                    <td>{{ status.condition }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock  %}
+
+
+<!--
+    {% if matches %}
+        <h2>Resultados:</h2>
+        <ul>
+            {% for supply in matches %}
+                <li>Folio encontrado: {{ supply.folio }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if id_serv %}
+        <p>El ID del servicio es: {{ id_serv }}</p>
+    {% endif %}
+</main>
+-->
+

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card card-body">
+    <form action="{% url 'save_route' %}" method="post" id="rutaForm">
+        {% csrf_token %}
+        <input type="hidden" name="route" id="id_route" value="{{ route.id_route }}">
+        <input type="hidden" name="lat_route" id="id_lat_route">
+        <input type="hidden" name="lon_route" id="id_lon_route">
+        <input type="hidden" name="puntos" id="id_puntos" value="">
+    
+        <label for="id_name_route">Nombre de la Ruta:</label>
+        {{ route_form.name_route }}
+        <label for="id_desc_route">Descripción:</label>
+        {{ route_form.desc_route }}
+        <button type="button" class="btn btn-success" onclick="guardarRuta()">Guardar Ruta</button>
+    </form>
+</div>
+
+<div id="map" style="height: 450px; width: 100%;"></div>
+
+<script>
+    var map;
+    var puntos = [];
+
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 19.191633, lng: -96.188799 },
+            zoom: 12
+        });
+
+        map.addListener('click', function(event) {
+            var lat = event.latLng.lat();
+            var lng = event.latLng.lng();
+            var punto = { lat: lat, lng: lng };
+            puntos.push(punto);
+
+            var marker = new google.maps.Marker({
+                position: punto,
+                map: map
+            });
+
+            // Actualizar los valores de latitud y longitud en el formulario
+            document.getElementById('id_lat_route').value = lat;
+            document.getElementById('id_lon_route').value = lng;
+
+            // Actualizar los puntos en el campo oculto
+            document.getElementById('id_puntos').value = JSON.stringify(puntos);
+        });
+    }
+
+    function guardarPuntos(routeId, puntos) {
+    var csrftoken = getCookie('csrftoken');
+    var data = {
+        id_route: routeId,
+        puntos: puntos
+    };
+
+    console.log(data)
+
+    fetch('save/route/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert('Puntos guardados correctamente');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+    
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    var csrftoken = getCookie('csrftoken');
+
+    function guardarRuta() {
+        var nombre = document.getElementById('id_name_route').value;
+        var descripcion = document.getElementById('id_desc_route').value;
+        var puntos = JSON.parse(document.getElementById('id_puntos').value);
+    
+        if (!nombre || !descripcion) {
+            alert('Por favor ingresa un nombre y una descripción para la ruta.');
+            return;
+        }
+    
+        if (puntos.length < 2) {
+            alert('Debes seleccionar al menos dos puntos para formar una ruta.');
+            return;
+        }
+    
+        var data = {
+            nombre: nombre,
+            descripcion: descripcion,
+            puntos: puntos
+        };
+    
+        fetch('{% url "save_route" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert('Ruta guardada correctamente');
+                document.getElementById('id_name_route').value = '';
+                document.getElementById('id_desc_route').value = '';
+                document.getElementById('id_lat_route').value = '';
+                document.getElementById('id_lon_route').value = '';
+                document.getElementById('id_puntos').value = '';
+                puntos = []; // Reinicia la lista de puntos después de guardar
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }    
+                    
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3EWIKBkTV6p3QwAVCrMDyrM1FlABbyG0&callback=initMap&libraries=visualization"></script>
+
+
+{% endblock %}

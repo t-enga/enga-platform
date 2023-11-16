@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .form-control:focus {
+        border-color: #80bdff; /* Cambia el color del contorno cuando está enfocado */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Agrega un sombreado cuando está enfocado */
+    }
+    
+    .form-control:valid {
+        background-color: #e2f0ff; /* Cambia el color de fondo cuando tiene un valor válido */
+    }
+</style>
+
+<main class="container">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">Editar datos de incio de lote {{trip.lote}}</h1>
+            <br>
+        </div>
+        <form method="POST">
+            {{ error }}
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-3 card card-body">
+                    <p>Lote: </p>
+                    {{ form.lote }}
+                    <p>Pesada:</p>
+                    {{ form.weight }}
+                    <p>Tipo de servicio:</p>
+                    {{ form.type_service }}
+                    <br>
+                </div>
+                <div class="col-md-3 card card-body">
+                    <p>Semana:</p>
+                    {{ form.week }}
+                    <p>Mes:</p>
+                    {{ form.month }}
+                    <p>Fecha del servicio:</p>
+                    {{ form.serv_date }}
+                    <p>Hora de cita:</p>
+                    {{ form.meeting_hour }}
+                </div>
+                <div class="col-md-3 card card-body">
+                    <p>Acopiador: </p>
+                    {{ form.supplier }}
+                    <p>Origen</p>
+                    {{ form.oigin }}
+                    <p>Lugar de cita:</p>
+                    {{ form.meeting_place }}                        
+                </div>
+                <div class="col-md-3 card card-body">
+                    <p>Tracto:</p>
+                    {{ form.truck }}
+                    <p>Remolque:</p>
+                    {{ form.trailer }}
+                    <p>Operador:</p>
+                    {{ form.driver }}
+                </div>
+            </div>
+            <br>
+            <div class="text-center">
+                <button class="btn btn-success">Actualizar</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

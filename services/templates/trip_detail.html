@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="card card-body">
+            <div class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">
+                <h1 class="text-center">Editar datos de lote: {{trip.lote}}</h1>
+            </div>
+            <br>
+            <form method="POST">
+                {{error}}
+                {% csrf_token %}
+                <div>
+                    <h3>Salida RM y llegada a cita</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1">Fecha y hora de salida de rancho: </p>
+                            {{ form.ranch_exit }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilometros de salida: </p>
+                            {{ form.kms_exit }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Fecha y hora llegada a cita: </p>
+                            {{ form.arrive_point }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilometros de llegada a cita: </p>
+                            {{ form.arrive_kms }}
+                        </div>
+                    </div>
+                    <br>
+                    <h3>Carga 1</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1">Fecha y hora de llegada Acopio: </p>
+                            {{ form.arrive_supp }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilometros de llegada Acopio: </p>
+                            {{ form.arrive_kmssupp }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Llegada de Carga 1: </p>
+                            {{ form.cargo1_arrival }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilometros de carga 1: </p>
+                            {{ form.cargo1_kms }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Sitio de Carga 1: </p>
+                            {{ form.cargo1_site }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Carga 1 Recogida: </p>
+                            {{ form.cargo1_collected }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Finalización de Carga 1: </p>
+                            {{ form.cargo1_fin }}
+                        </div>
+                    </div>
+                    <br>
+                    <h3>Carga 2</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1">Llegada de Carga 2: </p>
+                            {{ form.cargo2_arrival }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilómetros de Carga 2: </p>
+                            {{ form.cargo2_kms }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Sitio de Carga 2: </p>
+                            {{ form.cargo2_site }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Carga 2 Recogida: </p>
+                            {{ form.cargo2_collected }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Finalización de Carga 2: </p>
+                            {{ form.cargo2_fin }}
+                        </div>
+                    </div>
+                    <br>
+                    <h3>Carga 3</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1">Llegada de Carga 3: </p>
+                            {{ form.cargo3_arrival }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilómetros de Carga 3: </p>
+                            {{ form.cargo3_kms }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Sitio de Carga 3: </p>
+                            {{ form.cargo3_site }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Carga 3 Recogida: </p>
+                            {{ form.cargo3_collected }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Finalización de Carga 3: </p>
+                            {{ form.cargo3_fin }}
+                        </div>
+                    </div>
+                    <br>
+                    <h3>Salida acopio y llegada a RM</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="mb-1">Salida de acopio: </p>
+                            {{ form.exit_supplier }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Kilómetros salida acopio: </p>
+                            {{ form.exit_supplierkms }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">Llegada a RM: </p>
+                            {{ form.ranch_arrive }}
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">KMS llegada a RM: </p>
+                            {{ form.ranch_kms }}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="text-center">
+                    <button class="btn btn-success">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

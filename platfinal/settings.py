@@ -157,8 +157,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-GDAL_LIBRARY_PATH = 'C:/proyectos/final/venv/Lib/site-packages/osgeo/gdal304.dll'
-GEOS_LIBRARY_PATH = 'C:/proyectos/final/venv/Lib/site-packages/osgeo/geos_c.dll'
+#GDAL_LIBRARY_PATH = 'C:/proyectos/final/venv/Lib/site-packages/osgeo/gdal304.dll'
+#GEOS_LIBRARY_PATH = 'C:/proyectos/final/venv/Lib/site-packages/osgeo/geos_c.dll'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

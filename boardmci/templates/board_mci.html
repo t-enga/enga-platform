@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<h1>{{ mci.mci_name }}</h1>
+    <table id="tabla_calificaciones" border="1">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                {% for day in dias %}
+                    <th>{{ day }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Área</th>
+                <th>Responsable</th>
+                {% for day in dias %}
+                    <th>{{ day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Fila 1 -->
+            <tr>
+                <td>Área 1</td>
+                <td>Responsable 1</td>
+                {% for _ in dias %}
+                    <td contenteditable="true"></td>
+                {% endfor %}
+            </tr>
+            <!-- Fila 2 -->
+            <tr>
+                <td>Área 2</td>
+                <td>Responsable 2</td>
+                {% for _ in dias %}
+                    <td contenteditable="true"></td>
+                {% endfor %}
+            </tr>
+            <!-- ... Puedes continuar agregando más filas aquí ... -->
+        </tbody>
+    </table>
+    <button id="agregar_participante">Agregar Participante</button>
+
+    <div id="modal_agregar_participante" style="display: none;">
+        <input type="text" id="nombre_participante" placeholder="Nombre del participante">
+        <button id="guardar_participante">Guardar</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            var participanteCount = 2; // Empiezas con 2 filas fijas
+
+            // Función para agregar una nueva fila de participante
+            function agregarFilaParticipante(nombreParticipante) {
+                var fila = '<tr>' +
+                    '<td>Área ' + (participanteCount + 1) + '</td>' +
+                    '<td>Responsable ' + (participanteCount + 1) + '</td>';
+                {% for _ in dias %}
+                    fila += '<td contenteditable="true"></td>';
+                {% endfor %}
+                fila += '</tr>';
+                $('#tabla_calificaciones tbody').append(fila);
+                participanteCount++;
+            }
+
+            // Evento click para agregar participante
+            $('#agregar_participante').click(function() {
+                $('#modal_agregar_participante').show();
+            });
+
+            // Evento click para guardar participante
+            $('#guardar_participante').click(function() {
+                var nombreParticipante = $('#nombre_participante').val();
+                if (nombreParticipante) {
+                    agregarFilaParticipante(nombreParticipante);
+                    $('#modal_agregar_participante').hide();
+                    $('#nombre_participante').val('');
+                }
+            });
+
+            // Ocultar modal al hacer clic fuera de él
+            $(document).mouseup(function(e) {
+                var modal = $('#modal_agregar_participante');
+                if (!modal.is(e.target) && modal.has(e.target).length === 0) {
+                    modal.hide();
+                }
+            });
+        });
+    </script>
+
+{% endblock  %}

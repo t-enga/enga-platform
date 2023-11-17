@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from services import views
 from supplies.views import supplies, supplie_data, supplie_create, status_supplie, status_table, supplie_excel, create_assignment, assignment_table, supplie_traffic, supplies_finished, supplie_billing, supplie_delete, supplie_editinit, supplies_drivers, guardar_folio, search_folio, status_excel
 from androidapp.views import authenticate_user

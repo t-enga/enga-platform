@@ -52,9 +52,9 @@ INSTALLED_APPS = [
     'django_tables2',
     'django_filters',
     'django.contrib.gis',
-    'androidapp',
-    'boardmci',
-    'backtasks',
+    #'androidapp',
+    #'boardmci',
+    #'backtasks',
     'django_celery_beat',
 ]
 

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="d-flex col-md-6 offset-md-3 card card-body bg-success bg-gradient text-white text-emphasis-primary">Servicios asignados {{ trip.unit }}</h1>
+        </div>
+            <div class="col-md-6 offset-md-3">
+            <ul class="list-group">
+                {% for trip in trips %}
+                    {% if trip.folio is null %}
+                        <li class="list-group-item">
+                            <a>
+                            <h3> Folio: {{trip.folio}}</h3>
+                            <p>{{trip.port_supplier}}, {{trip.type_supplie}}, Unidad: {{ trip.truck }}, Turno: {{ trip.turns }} </p>
+                            </a>                                
+                            <a href="{% url 'status_supplie' trip.id_serv %}" class="btn btn-dark">
+                                Estatus
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+{% endblock %}

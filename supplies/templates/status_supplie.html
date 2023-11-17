@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="d-flex col-md-6 offset-md-3 card card-body bg-success bg-gradient text-white text-emphasis-primary">
+                Estatus para insumos {{ data.truck }}
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form id="miFormulario" class="card card-body text-center" method="POST">
+                    {% csrf_token %}
+                    {{ error }}
+                    <label for="status">Estatus: </label>
+                    {{ form1.status }}
+                    <label for="condition">Condicion: </label>
+                    {{ form1.condition }}
+                    <label for="kms">Kilometros: </label>
+                    {{ form1.kms }}
+                    <input type="hidden" name="latitud" id="latitud">
+                    <input type="hidden" name="longitud" id="longitud">
+                    <div style="display:none;">{{ form1.coordinates }}</div>
+                    <br>
+                    <div>
+                        <button type="submit" class="btn btn-primary" id="enviarFormulario">
+                            Ingresar estatus
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="folioModal" tabindex="-1" aria-labelledby="folioModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="folioModalLabel">Ingresar Folio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action=" {% url 'guardar_folio' data.id_serv %}" method="POST" >
+                    <div class="modal-body text-center">
+                        {% csrf_token %}
+                        {{ form2.folio }}
+                        <br>
+                        <button type="button" class="btn btn-primary" id="guardarFolio">Guardar Folio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitud = position.coords.latitude;
+                    var longitud = position.coords.longitude;
+    
+                    document.getElementById("latitud").value = latitud;
+                    document.getElementById("longitud").value = longitud;
+                });
+            } else {
+                console.log("Geolocalización no es soportada por este navegador.");
+            }
+        }
+    
+        // Llamar a la función para obtener coordenadas
+        getLocation();
+
+        
+
+        $(document).ready(function() {
+            $('#enviarFormulario').on('click', function(event) {
+                console.log("Botón 'enviarFormulario' clickeado");
+                var selectedStatus = $('#id_status').val();
+                var statusDescripcion = $('#id_status option[value="' + selectedStatus + '"]').text();
+        
+                if (statusDescripcion === "VACIO RANCHO") {
+                    $('#folioModal').modal('show');
+                    event.preventDefault(); // Evitar que el formulario se envíe
+                }
+            });
+        
+            $('#guardarFolio').on('click', function(event) {
+                event.preventDefault();
+                var folio = $('#id_folio').val();
+        
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "guardar_folio" data.id_serv %}',
+                    data: {
+                        'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
+                        'folio': folio,
+                    },
+                    success: function(response) {
+                        // Guardar el folio y luego enviar el formulario 1
+                        document.getElementById('miFormulario').submit();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });        
+    </script>
+</main>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="text-center">
+                <h1 class="d-flex card card-body bg-success bg-gradient text-white text-emphasis-primary">Datos de servicio</h1>
+            </div>
+            <br>
+            <div>
+                <div class="card card-body">
+                    <form method="POST">
+                        {{ error }}
+                        {% csrf_token %}
+                        {{ form }}
+                        <div>
+                            <button class="btn btn-success">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock  %}
